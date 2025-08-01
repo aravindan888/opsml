@@ -16,6 +16,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Load .env variables
+        run: |
+          set -a
+          source .env || true
+          set +a
+        shell: bash
+
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v2
         with:
@@ -27,7 +34,6 @@ jobs:
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2
 
-      # print versions (rustup, cargo, clippy)
       - name: Print versions
         run: rustc --version && cargo --version && cargo clippy --version && rustup --version
 
@@ -43,6 +49,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Load .env variables
+        run: |
+          set -a
+          source .env || true
+          set +a
+        shell: bash
+
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v2
         with:
@@ -57,13 +70,18 @@ jobs:
       - name: Run Unit Tests
         run: make test.unit
 
-  # this will run local client and server storage tests.
-  # Intergration tests will be run when prs are merged to main
   test-server:
     runs-on: ubuntu-22.04
     needs: format-and-lint
     steps:
       - uses: actions/checkout@v4
+
+      - name: Load .env variables
+        run: |
+          set -a
+          source .env || true
+          set +a
+        shell: bash
 
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v2
@@ -107,6 +125,13 @@ jobs:
     needs: [format-and-lint]
     steps:
       - uses: actions/checkout@v4
+
+      - name: Load .env variables
+        run: |
+          set -a
+          source .env || true
+          set +a
+        shell: bash
 
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v2
@@ -157,7 +182,6 @@ jobs:
         working-directory: ./py-opsml
         run: make test.unit.numpy1
 
-      # if 3.11 and ubuntu, run numpy v1 tests
       - name: Run TensorFlow tests
         if: ${{ matrix.os == 'ubuntu' && matrix.python-version == '3.11' }}
         working-directory: ./py-opsml
@@ -176,6 +200,13 @@ jobs:
     needs: [format-and-lint]
     steps:
       - uses: actions/checkout@v4
+
+      - name: Load .env variables
+        run: |
+          set -a
+          source .env || true
+          set +a
+        shell: bash
 
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v2
